@@ -1,4 +1,4 @@
-UNAME_S := $(shell uname -s)
+UNAME := $(shell uname -s)
 PATH_SRC = ./src/
 PATH_GNL = $(PATH_SRC)gnl/
 PATH_MAP = $(PATH_SRC)map/
@@ -10,7 +10,7 @@ PATH_MLX_Darwin = ./mlx_opengl/
 PATH_OBJ = ./obj/
 
 FLAGS_Darwin = -Lmlx_opengl -framework OpenGL -framework AppKit
-MLX = $(PATH_MLX_$(UNAME_S))libmlx_$(UNAME_S).a
+MLX = $(PATH_MLX_$(UNAME))libmlx_$(UNAME).a
 NAME = so_long
 
 FILES = $(PATH_MAP)map.c
@@ -19,14 +19,14 @@ OBJ = $(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(FILES))
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror
-MLXFLAGS = -I $(PATH_MLX_$(UNAME_S)) -L $(PATH_MLX_$(UNAME_S)) -lX11 -lXext
+MLXFLAGS = -I $(PATH_MLX_$(UNAME)) -L $(PATH_MLX_$(UNAME)) -lX11 -lXext
 RM = rm -rf
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@echo Objects done for Linux
-	@make -C $(PATH_MLX_$(UNAME_S))
+	@echo Object files made
+	@make -C $(PATH_MLX_$(UNAME))
 	@$(CC) $(CFLAGS) $(MLXFLAGS) $(PATH_SRC)so_long.c $(OBJ) $(MLX) -o $(NAME)
 	
 $(PATH_OBJ)%.o: $(PATH_SRC)%.c
@@ -44,7 +44,7 @@ clean:
 	$(RM) $(PATH_OBJ)
 
 fclean: clean
-	make clean -C $(PATH_MLX_$(UNAME_S))
+	make clean -C $(PATH_MLX_$(UNAME))
 	$(RM) $(NAME)
 
 re: fclean all
