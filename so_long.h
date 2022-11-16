@@ -32,8 +32,6 @@ enum mlx_events
 	EVENT_ON_DESTROY = 17
 };
 
-
-
 			/* This struct will check that there is at least 1 Player, 1 Exit, 1 Consumable, and the Map is valid. */
 			/* If any of these values are 0, the game will return an Error with the pertinent information. */
 typedef struct	s_valid
@@ -54,6 +52,7 @@ typedef struct	s_image
 	int		endian;
 }	t_image;
 
+			/* This struct displays the sprite of an entity when said entity is facing a certain direction */
 typedef struct s_direction
 {
 	t_image	up;
@@ -140,7 +139,7 @@ typedef struct	s_game
 }	t_game;
 
 			/* The core of the program */
-			/* This struct handles the gamestate and the existence and persistence of the Window */
+			/* This struct handles the gamestate and the existence and persistence of the Window, */
 			/* and its associated memory */
 typedef struct	s_root
 {
