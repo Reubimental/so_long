@@ -13,7 +13,11 @@ FLAGS_Darwin = -Lmlx_opengl -framework OpenGL -framework AppKit
 MLX = $(PATH_MLX_$(UNAME))libmlx_$(UNAME).a
 NAME = so_long
 
-FILES = $(PATH_MAP)map.c
+FILES = $(PATH_GAME)start.c			$(PATH_GAME)action.c		$(PATH_ERRORS)error.c		\
+		$(PATH_MAP)init_sprites.c	$(PATH_MAP)map.c			$(PATH_MAP)render_map.c		\
+		$(PATH_MAP)valid_map.c		$(PATH_MAP)verify.c			$(PATH_MAP)checks.c			\
+		$(PATH_UTILS)ft_itoa.c		$(PATH_UTILS)ft_strlen.c	$(PATH_UTILS)ft_strdup.c	\
+		$(PATH_GNL)get_next_line_utils.c	$(PATH_GNL)get_next_line.c $(PATH_GAME)move.c
 
 OBJ = $(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(FILES))
 

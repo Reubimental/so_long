@@ -14,85 +14,66 @@
 
 t_root	root;
 
-void	init_game()
+int	key_hook(int keycode, t_root *root)
 {
-	root.game = malloc(sizeof(t_game));
+	switch (keycode)
+	{
+		case	KEY_ESC:
+			exit_game(root);
+			break;
+		case	KEY_RESET:
+			reset(root);
+			break;
+		case	KEY_W:
+		case	KEY_UP:
+			root->game->entity.player.facing = FACING_UP;
+			root->game->entity.player.position.y -= 1;
+			break;
+		case	KEY_A:
+		case	KEY_LEFT:
+			root->game->entity.player.facing = FACING_LEFT;
+			root->game->entity.player.position.x -= 1;
+			break;
+		case	KEY_S:
+		case	KEY_DOWN:
+			root->game->entity.player.facing = FACING_DOWN;
+			root->game->entity.player.position.y += 1;
+			break;
+		case	KEY_D:
+		case	KEY_RIGHT:
+			root->game->entity.player.facing = FACING_RIGHT;
+			root->game->entity.player.position.x += 1;
+			break;
+	}
+	if (!root->game->end_game)
+		move_player(root, root->game->entity.player.position.x,
+			root->game->entity.player.position.y, keycode);
+	return (1);
 }
 
-int	key_hook(int keycode, t_root root)
+int exit_game(t_root *root)
 {
-	if (keycode == KEY_ESC)
-	{
-		exit_game();
-	}
-	else if (keycode == KEY_W || keycode == KEY_UP)
-	{
-		root.game->player.direction = DIRECTION_UP;
-		root.game->player.position.y -= 1;
-	}
-	else if (keycode == KEY_A || keycode == KEY_LEFT)
-	{
-		root.game->player.direction = DIRECTION_LEFT;
-		root.game->player.position.x -= 1;
-	}
-	else if (keycode == KEY_S || keycode == KEY_DOWN)
-	{
-		root.game->player.direction = DIRECTION_DOWN;
-		root.game->player.position.y += 1;
-	}
-	else if (keycode == KEY_D || keycode == KEY_RIGHT)
-	{
-		root.game->player.direction = DIRECTION_RIGHT;
-		root.game->player.position.x += 1;
-	}
-	return (0);
-}
-
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-int exit_game()
-{
-	mlx_clear_window(root.mlx, root.mlx_win);
-	mlx_destroy_window(root.mlx, root.mlx_win);
+	free_map(root->game->map.map, &root->game->map);
+	mlx_clear_window(root->mlx, root->win);
+	mlx_destroy_window(root->mlx, root->win);
 	exit(0);
 	return (0);
 }
 
-void create_player()
+int	main(int argc, char **argv)
 {
-	root.game->player.width = 50;
-	root.game->player.height = PLAYER_SIZE;
-	root.game->player.image.img = mlx_new_image(root.mlx, root.game->player.width, root.game->player.height);
-	root.game->player.image.addr = mlx_get_data_addr(root.game->player.image.img, &root.game->player.image.bits_per_pixel, &root.game->player.image.line_length, &root.game->player.image.endian);
-	my_mlx_pixel_put(&root.game->player.image, 5, 5, 0x00FFFF00);
-}
+	t_root	root;
 
-void create_background(t_data *bg)
-{
-	bg->img = mlx_new_image(root.mlx, 1366, 768);
-	bg->addr = mlx_get_data_addr(bg->img, &bg->bits_per_pixel, &bg->line_length, &bg->endian);
-	my_mlx_pixel_put(bg, 400, 400, 0x00FFFF00);
-}
-
-int	main(void)
-{
-	t_data	background;
-	init_game();
-	root.mlx = mlx_init();
-	root.mlx_win = mlx_new_window(root.mlx, 1366, 768, "Hello World!");
-	if (!root.mlx_win)
+	if (init_game(&root, argc, argv) < 0)
 		return (0);
-	create_background(&background);
-	create_player();
-	mlx_hook(root.mlx_win, EVENT_ON_DESTROY, 0, exit_game, &root);
-	mlx_key_hook(root.mlx_win, key_hook, &root);
-	//mlx_loop_hook(root.mlx);
-	mlx_put_image_to_window(root.mlx, root.mlx_win, background.img, 0, 0);
+	root.mlx = mlx_init();
+	root.win = mlx_new_window(root.mlx, root.game->map.column * TILE_SIZE,
+			root.game->map.row * TILE_SIZE, "so_long");
+	if (!root.win)
+		return (0);
+	print_map(&root);
+	mlx_hook(root.win, EVENT_ON_DESTROY, 0, exit_game, &root);
+	mlx_key_hook(root.win, key_hook, &root);
+	mlx_loop_hook(root.mlx, update, &root);
 	mlx_loop(root.mlx);
 }

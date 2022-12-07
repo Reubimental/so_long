@@ -90,9 +90,8 @@ char	*copy_line(char *input)
 	return (output);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, char **line)
 {
-	char		*line;
 	static char	*save;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
@@ -100,7 +99,7 @@ char	*get_next_line(int fd)
 	save = read_file_to_memory(fd, save);
 	if (!save)
 		return (NULL);
-	line = copy_line(save);
+	*line = copy_line(save);
 	save = ft_save(save);
-	return (line);
+	return (*line);
 }

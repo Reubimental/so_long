@@ -1,28 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rkabzins <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/04 03:12:12 by rkabzins          #+#    #+#             */
-/*   Updated: 2022/04/04 03:12:18 by rkabzins         ###   ########.fr       */
+/*   Created: 2022/02/12 16:54:05 by rkabzins          #+#    #+#             */
+/*   Updated: 2022/02/18 05:30:39 by rkabzins         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 50
-# endif
-# include "../../so_long.h"
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
+#include "../../so_long.h"
 
-char	*ft_strchr(const char *str, int c);
-char	*ft_strjoin(char *s1, char *s2);
-size_t	ft_strlen(const char *str);
-char	*get_next_line(int fd, char **line);
+size_t	ft_strlen(const char *str)
+{
+	int	len;
 
-#endif
+	len = 0;
+	while (str[len])
+		len++;
+	return (len);
+}
