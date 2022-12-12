@@ -12,15 +12,49 @@
 
 #include "../../so_long.h"
 
-void	start_map(t_map *map)
+void	init_game(t_game *game)
 {
+	game->refresh_rate = 0;
+	game->end_game = 0;
+	game->steps_taken = 0;
+}
+
+void	pos_count_structs(t_position *player_pos, t_position *player_pos_reset, t_count *count)
+{
+	player_pos->x = 0;
+	player_pos->y = 0;
+	player_pos_reset->x = 0;
+	player_pos_reset->y = 0;
+	count->player_count = 0;
+	count->exit_count = 0;
+	count->consumable_count = 0;
+}
+
+void	map_structs(t_map *map)
+{
+	t_position	player_pos;
+	t_position	player_pos_reset;
+	t_count		count;
+
+	//map_size = ft_strlen(map_str);
+	pos_count_structs(&player_pos, &player_pos_reset, &count);
+	map->player_pos = player_pos;
+	map->player_pos_reset = player_pos_reset;
+	map->count = count;
 	map->row = 0;
 	map->column = 0;
 	map->item_reset = 0;
-	map->valid.player_count = 0;
-	map->valid.exit_count = 0;
-	map->valid.consumable_count = 0;
-	map->valid.valid_map = 1;
+	map->column_size = 0;
+	map->valid = 1;
+}
+
+void	start_map(t_root *root, int argc, char **argv)
+{
+	t_map	map;
+
+	map_structs(&map);
+	root->game->map = map;
+	root->game->map.map = init_map(root, argc, argv);
 }
 
 void	init_window(t_root *root)
@@ -30,20 +64,18 @@ void	init_window(t_root *root)
 			root->game->map.row * TILE_SIZE, "so_long");
 }
 
-int	init_game(t_root *root, int argc, char **argv)
+int	init_root(t_root *root, int argc, char **argv)
 {
-	t_map	map;
+	t_game	game;
 
-	start_map(&map);
-	root->game->map = map;
-	root->game->map.map = init_map(root, argc, argv);
+	init_game(&game);
+	root->game = &game;
+	start_map(root, argc, argv);
 	if (root->game->map.map == NULL)
 		return (-1);
 	init_window(root);
-	root->game->entity = init_entities(root->mlx);
+	init_entities(root, root->mlx);
 	root->game->entity.player.facing = FACING_DOWN;
-	root->game->end_game = 0;
-	root->game->refresh_rate = 0;
 	print_map(root);
 	return (1);
 }

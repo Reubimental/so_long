@@ -12,10 +12,19 @@
 
 #include "../so_long.h"
 
-t_root	root;
+void	debug_map(char *string)
+{
+	printf("%s\n", string);
+}
 
 int	key_hook(int keycode, t_root *root)
 {
+	int	row;
+	int	col;
+
+	row = root->game->map.player_pos.y;
+	col = root->game->map.player_pos.x;
+	printf("%skey_hook started.%s\n", K_YELLOW, K_NORMAL);
 	switch (keycode)
 	{
 		case	KEY_ESC:
@@ -26,28 +35,33 @@ int	key_hook(int keycode, t_root *root)
 			break;
 		case	KEY_W:
 		case	KEY_UP:
-			root->game->entity.player.facing = FACING_UP;
-			root->game->entity.player.position.y -= 1;
+			row--;
+ 			root->game->entity.player.facing = FACING_UP;
 			break;
 		case	KEY_A:
 		case	KEY_LEFT:
-			root->game->entity.player.facing = FACING_LEFT;
-			root->game->entity.player.position.x -= 1;
+			printf("%sKey_Left/Key_A Pressed.%s\n", K_BLUE, K_NORMAL);
+ 			root->game->entity.player.facing = FACING_LEFT;
+			printf("%sDirection Changed.%s\n", K_RED, K_NORMAL);
+			printf("%sPosition = %d%s\n", K_MAGENTA, root->game->map.player_pos.x, K_NORMAL);
+			col--;
+			printf("%sPosition Changed.%s\n", K_MAGENTA, K_NORMAL);
+			printf("%sPosition = %d%s\n", K_MAGENTA, root->game->map.player_pos.x, K_NORMAL);
 			break;
 		case	KEY_S:
 		case	KEY_DOWN:
-			root->game->entity.player.facing = FACING_DOWN;
-			root->game->entity.player.position.y += 1;
+			debug_map(root->game->map.map[4]);
+			row++;
+ 			root->game->entity.player.facing = FACING_DOWN;
 			break;
 		case	KEY_D:
 		case	KEY_RIGHT:
-			root->game->entity.player.facing = FACING_RIGHT;
-			root->game->entity.player.position.x += 1;
+			col++;
+ 			root->game->entity.player.facing = FACING_RIGHT;
 			break;
 	}
 	if (!root->game->end_game)
-		move_player(root, root->game->entity.player.position.x,
-			root->game->entity.player.position.y, keycode);
+		move_player(root, row, col, keycode);
 	return (1);
 }
 
@@ -64,16 +78,14 @@ int	main(int argc, char **argv)
 {
 	t_root	root;
 
-	if (init_game(&root, argc, argv) < 0)
+	if (init_root(&root, argc, argv) < 0)
 		return (0);
-	root.mlx = mlx_init();
-	root.win = mlx_new_window(root.mlx, root.game->map.column * TILE_SIZE,
-			root.game->map.row * TILE_SIZE, "so_long");
 	if (!root.win)
 		return (0);
-	print_map(&root);
-	mlx_hook(root.win, EVENT_ON_DESTROY, 0, exit_game, &root);
-	mlx_key_hook(root.win, key_hook, &root);
+	// print_map(&root);
+	mlx_hook(root.win, EVENT_ON_DESTROY, 0, exit_game, (void *)&root);
+	mlx_hook(root.win, EVENT_ON_KEYDOWN, (1L << 0), key_hook, (void *)&root);
 	mlx_loop_hook(root.mlx, update, &root);
 	mlx_loop(root.mlx);
+	return (0);
 }

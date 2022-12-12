@@ -34,11 +34,11 @@ void	free_map(char **map_data, t_map *map)
 
 	i = 0;
 	while (i <= map->row)
-	{
 		free(map_data[i++]);
-		free(map->map_reset);
-	}
 	free(map_data);
+	i = 0;
+	while (i <= map->row)
+		free(map->map_reset[i++]);
 	free(map->map_reset);
 }
 
@@ -51,11 +51,14 @@ int	backup_map(t_map *map, char **map_data)
 	map->map_reset = malloc(sizeof(char *) * row + 1);
 	if (!map->map_reset)
 		return (error_msg("Caution: Map Backup Failed."));
-	i = -1;
-	while (++i < row)
+	i = 0;
+	while (i < row)
+	{
 		map->map_reset[i] = ft_strdup(map_data[i]);
+		i++;
+	}
 	map->map_reset[i] = NULL;
-	map->item_reset = map->valid.consumable_count;
+	map->item_reset = map->count.consumable_count;
 	return (1);
 }
 
@@ -72,10 +75,13 @@ int	recover(t_map *map)
 	map->map = malloc(sizeof(char *) * row + 1);
 	if (!map->map)
 		return (0);
-	i = -1;
-	while (++i < row)
+	i = 0;
+	while (i < row)
+	{
 		map->map[i] = ft_strdup(map->map_reset[i]);
+		i++;
+	}
 	map->map[i] = NULL;
-	map->valid.consumable_count = map->item_reset;
+	map->count.consumable_count = map->item_reset;
 	return (1);
 }

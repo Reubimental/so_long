@@ -18,10 +18,8 @@ void	init_player(t_entity *entity, void *mlx)
 			&entity->player.size.x, &entity->player.size.y);
 	entity->player.direction.right.addr = mlx_get_data_addr(entity->player.direction.right.img, &entity->player.direction.right.bpp,
 			&entity->player.direction.right.line_length, &entity->player.direction.right.endian);
-	entity->player.sprite.img = mlx_xpm_file_to_image(mlx, PATH_PD,
-			&entity->player.size.x, &entity->player.size.y);
-	entity->player.sprite.addr = mlx_get_data_addr(entity->player.sprite.img, &entity->player.sprite.bpp,
-			&entity->player.sprite.line_length, &entity->player.sprite.endian);
+	entity->player.sprite = entity->player.direction.down;
+	entity->player.facing = FACING_DOWN;
 }
 
 void	init_enemy(t_entity *entity, void *mlx)
@@ -34,10 +32,7 @@ void	init_enemy(t_entity *entity, void *mlx)
 			&entity->enemy.size.x, &entity->enemy.size.y);
 	entity->enemy.direction.right.addr = mlx_get_data_addr(entity->enemy.direction.right.img, &entity->enemy.direction.right.bpp,
 			&entity->enemy.direction.right.line_length, &entity->enemy.direction.right.endian);
-	entity->enemy.sprite.img = mlx_xpm_file_to_image(mlx, PATH_ER,
-			&entity->enemy.size.x, &entity->enemy.size.y);
-	entity->enemy.sprite.addr = mlx_get_data_addr(entity->enemy.sprite.img, &entity->enemy.sprite.bpp,
-			&entity->enemy.sprite.line_length, &entity->enemy.sprite.endian);
+	entity->enemy.sprite = entity->enemy.direction.left;
 }
 
 void	init_item(t_entity *entity, void *mlx)

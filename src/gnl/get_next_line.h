@@ -1,28 +1,24 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rkabzins <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/04 03:12:12 by rkabzins          #+#    #+#             */
-/*   Updated: 2022/04/04 03:12:18 by rkabzins         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 50
-# endif
-# include "../../so_long.h"
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
 
-char	*ft_strchr(const char *str, int c);
-char	*ft_strjoin(char *s1, char *s2);
-size_t	ft_strlen(const char *str);
-char	*get_next_line(int fd, char **line);
+# define GET_NEXT_LINE_H
+
+# include "../../so_long.h"
+
+# define OPEN_MAX 256
+# define BUFFER_SIZE 1
+
+typedef struct s_gnl
+{
+	ssize_t			size;
+	char			*buffer;
+	char			*tmp;
+}	t_var;
+
+int		get_next_line(int fd, char **line);
+char	*ft_line(char *s, size_t len);
+char	*ft_strchr(const char *s, int c);
+size_t	ft_strlen(const char *s);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strdup(const char *source);
 
 #endif

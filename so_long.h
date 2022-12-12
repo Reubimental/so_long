@@ -8,7 +8,7 @@
 # define PATH_PR "./sprites/frog_standard_right.xpm"
 # define PATH_EL "./sprites/enemy_left.xpm"
 # define PATH_ER "./sprites/enemy_right.xpm"
-# define PATH_EX "./sprites/exit.xpm" // still need
+# define PATH_EX "./sprites/exit.xpm"
 # define PATH_W "./sprites/wall.xpm"
 # define PATH_P "./sprites/path.xpm"
 # define PATH_I "./sprites/item.xpm"
@@ -25,12 +25,22 @@
 # define KEY_ESC 65307
 # define KEY_RESET 114
 
+# define K_NORMAL  "\x1B[0m"
+# define K_RED  "\x1B[31m"
+# define K_GREEN  "\x1B[32m"
+# define K_YELLOW  "\x1B[33m"
+# define K_BLUE  "\x1B[34m"
+# define K_MAGENTA  "\x1B[35m"
+# define K_CYAN  "\x1B[36m"
+# define K_WHITE  "\x1B[37m"
+
 # include "mlx_linux/mlx_int.h"
 # include "mlx_linux/mlx.h"
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
 # include <errno.h>
+# include <stdbool.h>
 # include "src/gnl/get_next_line.h"
 
 enum mlx_events
@@ -65,13 +75,12 @@ enum t_facing
 
 			/* This struct will check that there is at least 1 Player, 1 Exit, 1 Consumable, and the Map is valid. */
 			/* If any of these values are 0, the game will return an Error with the pertinent information. */
-typedef struct	s_valid
+typedef struct	s_count
 {
 	int	player_count;
 	int	exit_count;
 	int	consumable_count;
-	int	valid_map;
-}	t_valid;
+}	t_count;
 
 			/* This struct tracks the image data for elements of the game */
 typedef struct	s_image
@@ -104,9 +113,10 @@ typedef struct	s_position
 			/* since they do not have a direction, size, and do not need to 'exist' */
 typedef struct	s_tile
 {
-	t_image		sprite;
 	t_position	position;
 	t_position	size;
+	t_image		sprite;
+
 }	t_tile;
 
 			/* This struct stores relevant data for entities, including: */
@@ -121,7 +131,6 @@ typedef struct	s_e_data
 	t_position			size;
 	t_direction			direction;
 	t_image				sprite;
-	int					exists;
 	enum	t_facing	facing;
 }	t_e_data;
 
@@ -133,10 +142,11 @@ typedef struct	s_map
 	char		**map;
 	char		**map_reset;
 	int			row;
-	int			column;
-	t_valid		valid;
+	int			column;	
 	int			item_reset;
 	int			column_size;
+	t_count		count;
+	int			valid;
 }	t_map;
 
 			/* This struct holds the data that differentiates the different entitity types */
@@ -144,8 +154,8 @@ typedef struct	s_entity
 {
 	t_e_data	player;
 	t_e_data	enemy;
-	t_e_data	item;
 	t_e_data	exit;
+	t_tile		item;
 	t_tile		wall;
 	t_tile		path;
 }	t_entity;
@@ -171,13 +181,22 @@ typedef struct	s_root
 }	t_root;
 
 char		**init_map(t_root *root,int argc, char **argv);
+void		init_entities(t_root *root, void *mlx);
+void		init_window(t_root *root);
+void		init_player(t_entity *entity, void *mlx);
+void		init_enemy(t_entity *entity, void *mlx);
+void		init_item(t_entity *entity, void *mlx);
+void		init_exit(t_entity *entity, void *mlx);
+void		init_wall(t_entity *entity, void *mlx);
+int			init_root(t_root *root, int argc, char **argv);
+void		print_player(t_root *root, t_position pos);
+void		print_map(t_root *root);
+void		start_map(t_root *root, int argc, char **argv);
 int			valid_map(int argc, char *map_file);
-t_entity	init_entities(void *mlx);
-int			exit_game();
+int			exit_game(t_root *root);
 int			error_msg(char *message);
 void		*nullptr_error(char *message);
 void		warning(char *message);
-void		print_map(t_root *root);
 int			update(t_root *roots);
 char		*ft_itoa(int n);
 char		**read_map(char *path, t_map *map);
@@ -191,14 +210,8 @@ char		*ft_strdup(const char *source);
 void		verify(int valid, t_map *map);
 int			check(char c, t_map *map, int col, int line);
 void		check_last_line(char *row, t_map *map);
-void		init_player(t_entity *entity, void *mlx);
-void		init_enemy(t_entity *entity, void *mlx);
-void		init_item(t_entity *entity, void *mlx);
-void		init_exit(t_entity *entity, void *mlx);
-void		init_wall(t_entity *entity, void *mlx);
 int			valid_entities(t_map *map);
 int			check_c(char c, t_map *map, int col, int row);
-int			init_game(t_root *root, int argc, char **argv);
 int			check_wall(char c);
 int			key_hook(int keycode, t_root *root);
 void		kill_player(t_root *root);
