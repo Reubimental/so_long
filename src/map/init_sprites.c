@@ -63,3 +63,14 @@ void	init_wall(t_entity *entity, void *mlx)
 			&entity->path.sprite.line_length, &entity->path.sprite.endian);
 }
 
+void	init_animation(t_entity *entity, void *mlx)
+{
+	entity->animation.direction.left.img = mlx_xpm_file_to_image(mlx, PATH_EL_A,
+			&entity->animation.size.x, &entity->animation.size.y);
+	entity->animation.direction.left.addr = mlx_get_data_addr(entity->animation.direction.left.img, &entity->animation.direction.left.bpp,
+			&entity->animation.direction.left.line_length, &entity->animation.direction.left.endian);
+	entity->animation.direction.right.img = mlx_xpm_file_to_image(mlx, PATH_ER_A,
+			&entity->animation.size.x, &entity->animation.size.y);
+	entity->animation.direction.right.addr = mlx_get_data_addr(entity->animation.direction.right.img, &entity->animation.direction.right.bpp,
+			&entity->animation.direction.right.line_length, &entity->animation.direction.right.endian);
+}

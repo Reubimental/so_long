@@ -17,12 +17,12 @@ FILES = $(PATH_GAME)start.c			$(PATH_GAME)action.c		$(PATH_ERRORS)error.c		\
 		$(PATH_MAP)init_sprites.c	$(PATH_MAP)map.c			$(PATH_MAP)render_map.c		\
 		$(PATH_MAP)valid_map.c		$(PATH_MAP)verify.c			$(PATH_MAP)checks.c			\
 		$(PATH_UTILS)ft_itoa.c		$(PATH_UTILS)ft_strlen.c	$(PATH_UTILS)ft_strdup.c	\
-		$(PATH_GNL)get_next_line_utils.c	$(PATH_GNL)get_next_line.c $(PATH_GAME)move.c
+		$(PATH_GNL)get_next_line_utils.c	$(PATH_GNL)get_next_line.c $(PATH_GAME)move.c	\
 
 OBJ = $(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(FILES))
 
 CC = clang
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g
 MLXFLAGS = -I $(PATH_MLX_$(UNAME)) -L $(PATH_MLX_$(UNAME)) -lX11 -lXext
 RM = rm -rf
 

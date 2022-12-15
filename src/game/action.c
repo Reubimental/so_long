@@ -25,12 +25,18 @@ void	kill_player(t_root *root)
 int	update(t_root *root)
 {
 	if (root->game->refresh_rate < 30)
+	{
 		root->game->refresh_rate += 0.1;
+	}
 	else if (root->game->end_game < 1)
 	{
-		mlx_clear_window(root->mlx, root->win);
+		print_map(root);
+		//roaming(root);
 		root->game->refresh_rate = 0;
+		if (root->game->animate < 90)
+			root->game->animate++;
+		else
+			root->game->animate = 0;
 	}
-	print_map(root);
 	return (0);
 }

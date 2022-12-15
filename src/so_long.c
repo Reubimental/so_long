@@ -12,11 +12,6 @@
 
 #include "../so_long.h"
 
-void	debug_map(char *string)
-{
-	printf("%s\n", string);
-}
-
 int	key_hook(int keycode, t_root *root)
 {
 	int	row;
@@ -24,7 +19,6 @@ int	key_hook(int keycode, t_root *root)
 
 	row = root->game->map.player_pos.y;
 	col = root->game->map.player_pos.x;
-	printf("%skey_hook started.%s\n", K_YELLOW, K_NORMAL);
 	switch (keycode)
 	{
 		case	KEY_ESC:
@@ -40,17 +34,11 @@ int	key_hook(int keycode, t_root *root)
 			break;
 		case	KEY_A:
 		case	KEY_LEFT:
-			printf("%sKey_Left/Key_A Pressed.%s\n", K_BLUE, K_NORMAL);
  			root->game->entity.player.facing = FACING_LEFT;
-			printf("%sDirection Changed.%s\n", K_RED, K_NORMAL);
-			printf("%sPosition = %d%s\n", K_MAGENTA, root->game->map.player_pos.x, K_NORMAL);
 			col--;
-			printf("%sPosition Changed.%s\n", K_MAGENTA, K_NORMAL);
-			printf("%sPosition = %d%s\n", K_MAGENTA, root->game->map.player_pos.x, K_NORMAL);
 			break;
 		case	KEY_S:
 		case	KEY_DOWN:
-			debug_map(root->game->map.map[4]);
 			row++;
  			root->game->entity.player.facing = FACING_DOWN;
 			break;
@@ -65,11 +53,18 @@ int	key_hook(int keycode, t_root *root)
 	return (1);
 }
 
+void	clear_game(t_root *root)
+{
+	free(root->game);
+}
+
 int exit_game(t_root *root)
 {
 	free_map(root->game->map.map, &root->game->map);
 	mlx_clear_window(root->mlx, root->win);
 	mlx_destroy_window(root->mlx, root->win);
+	//free_enemies(root);
+	clear_game(root);
 	exit(0);
 	return (0);
 }
@@ -82,7 +77,7 @@ int	main(int argc, char **argv)
 		return (0);
 	if (!root.win)
 		return (0);
-	// print_map(&root);
+	print_map(&root);
 	mlx_hook(root.win, EVENT_ON_DESTROY, 0, exit_game, (void *)&root);
 	mlx_hook(root.win, EVENT_ON_KEYDOWN, (1L << 0), key_hook, (void *)&root);
 	mlx_loop_hook(root.mlx, update, &root);

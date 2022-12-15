@@ -2,28 +2,32 @@
 
 int	check_c(char c, t_map *map, int col, int row)
 {
-	printf("%sFunction: check_c.%s\nFile: verify%s\nPosition = %d%s\n", K_MAGENTA, K_YELLOW, K_RED, map->player_pos.x, K_NORMAL);
+	int	result;
+
+	result = 1;
 	switch (c)
 	{
 		case 'P':
 			map->count.player_count += 1;
 			map->player_pos.x = col;
 			map->player_pos.y = row - 1;
-			printf("%sPlayer Located At:\n%sColumn: %d\n%sRow: %d%s\n", K_WHITE, K_GREEN, col, K_CYAN, row, K_NORMAL);
 			map->player_pos_reset.x = col;
 			map->player_pos_reset.y = row - 1;
-			return (1);
+			break;
 		case 'E':
 			map->count.exit_count += 1;
-			return (1);
+			break;
 		case 'C':
 			map->count.consumable_count += 1;
-			return (1);
+			break;
 		case '1':
 		case '0':
+			break;
 		case 'F':
-			return (1);
+			map->count.enemy_count += 1;
+			break;
 		default:
-			return (0);
+			result = 0;
 	}
+	return (result);
 }

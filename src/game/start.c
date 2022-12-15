@@ -17,6 +17,7 @@ void	init_game(t_game *game)
 	game->refresh_rate = 0;
 	game->end_game = 0;
 	game->steps_taken = 0;
+	game->animate = 0;
 }
 
 void	pos_count_structs(t_position *player_pos, t_position *player_pos_reset, t_count *count)
@@ -28,6 +29,7 @@ void	pos_count_structs(t_position *player_pos, t_position *player_pos_reset, t_c
 	count->player_count = 0;
 	count->exit_count = 0;
 	count->consumable_count = 0;
+	count->enemy_count = 0;
 }
 
 void	map_structs(t_map *map)
@@ -36,7 +38,6 @@ void	map_structs(t_map *map)
 	t_position	player_pos_reset;
 	t_count		count;
 
-	//map_size = ft_strlen(map_str);
 	pos_count_structs(&player_pos, &player_pos_reset, &count);
 	map->player_pos = player_pos;
 	map->player_pos_reset = player_pos_reset;
@@ -66,15 +67,14 @@ void	init_window(t_root *root)
 
 int	init_root(t_root *root, int argc, char **argv)
 {
-	t_game	game;
-
-	init_game(&game);
-	root->game = &game;
+	root->game = malloc(sizeof(t_game));
+	init_game(root->game);
 	start_map(root, argc, argv);
+//	init_enemies(root);
 	if (root->game->map.map == NULL)
 		return (-1);
 	init_window(root);
-	init_entities(root, root->mlx);
+	init_entities(root);
 	root->game->entity.player.facing = FACING_DOWN;
 	print_map(root);
 	return (1);

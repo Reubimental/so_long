@@ -7,7 +7,9 @@
 # define PATH_PL "./sprites/frog_standard_left.xpm"
 # define PATH_PR "./sprites/frog_standard_right.xpm"
 # define PATH_EL "./sprites/enemy_left.xpm"
+# define PATH_EL_A "./sprites/enemy_left_anim.xpm"
 # define PATH_ER "./sprites/enemy_right.xpm"
+# define PATH_ER_A "./sprites/enemy_right_anim.xpm"
 # define PATH_EX "./sprites/exit.xpm"
 # define PATH_W "./sprites/wall.xpm"
 # define PATH_P "./sprites/path.xpm"
@@ -80,6 +82,7 @@ typedef struct	s_count
 	int	player_count;
 	int	exit_count;
 	int	consumable_count;
+	int	enemy_count;
 }	t_count;
 
 			/* This struct tracks the image data for elements of the game */
@@ -124,7 +127,6 @@ typedef struct	s_tile
 			/* *The direction the entity is facing */
 			/* *The entities size */
 			/* *The location is memory of the entities sprite */
-			/* *How many of the entity still exists on the map */
 typedef struct	s_e_data
 {
 	t_position			position;
@@ -155,6 +157,7 @@ typedef struct	s_entity
 	t_e_data	player;
 	t_e_data	enemy;
 	t_e_data	exit;
+	t_e_data	animation;
 	t_tile		item;
 	t_tile		wall;
 	t_tile		path;
@@ -168,6 +171,7 @@ typedef struct	s_game
 	double		refresh_rate; // replaced period because of clashes with time function
 	int			end_game;
 	int			steps_taken;
+	int			animate;
 }	t_game;
 
 			/* The core of the program */
@@ -181,14 +185,20 @@ typedef struct	s_root
 }	t_root;
 
 char		**init_map(t_root *root,int argc, char **argv);
-void		init_entities(t_root *root, void *mlx);
+void		init_entities(t_root *root);
 void		init_window(t_root *root);
 void		init_player(t_entity *entity, void *mlx);
 void		init_enemy(t_entity *entity, void *mlx);
 void		init_item(t_entity *entity, void *mlx);
 void		init_exit(t_entity *entity, void *mlx);
 void		init_wall(t_entity *entity, void *mlx);
+void		init_animation(t_entity *entity, void *mlx);
 int			init_root(t_root *root, int argc, char **argv);
+void		animate(t_root *root, t_position pos);
+//void		init_enemies(t_root *root);
+//void		roaming(t_root *root);
+//void		roam_enemy(t_root *root, t_enemy *enemy);
+//void		add_enemy(t_root *root, t_enemy new_enemy);
 void		print_player(t_root *root, t_position pos);
 void		print_map(t_root *root);
 void		start_map(t_root *root, int argc, char **argv);
@@ -203,6 +213,7 @@ char		**read_map(char *path, t_map *map);
 int			rows(char *map_data, t_map *map);
 int			counter(int fd, int row_count, int column_count, t_map *map);
 void		free_map(char **map_data, t_map *map);
+//void		free_enemies(t_root *root);
 int			backup_map(t_map *map, char **map_data);
 int			recover(t_map *map);
 int			check_extension(char *str, char *extension);
@@ -218,5 +229,6 @@ void		kill_player(t_root *root);
 int			verify_move(t_root *root, int row, int column, int keycode);
 void		move_player(t_root *root, int row, int column, int keycode);
 void		reset(t_root *root);
+//void		*ft_memcpy(void *dest, const void *src, size_t n);
 
 #endif

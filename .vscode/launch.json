@@ -3,6 +3,25 @@
 	// Hover to view descriptions of existing attributes.
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
-	"program": ["/home/reuben/School/so_long/"],
-	"args": ["map_files/map.ber"]
+	"configurations": [
+	{
+		"name": "build and debug active file",
+		"type": "cppdbg",
+		"request": "launch",
+		"program": "${workspaceFolder}/so_long",
+		"args": ["map_files/map.ber"],
+		"stopAtEntry": false,
+		"cwd": "${workspaceFolder}",
+		"environment": [],
+		"externalConsole": false, //set to true to see output in cmd instead
+		"MIMode": "gdb",
+		"setupCommands": [
+		{
+			"description": "Enable pretty-printing for gdb",
+			"text": "-enable-pretty-printing",
+			"ignoreFailures": true
+		}
+		]
+	}
+]
 }
