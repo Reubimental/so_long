@@ -36,8 +36,16 @@
 # define K_CYAN  "\x1B[36m"
 # define K_WHITE  "\x1B[37m"
 
+# ifdef __APPLE__
+#  include "mlx_opengl/mlx_int.h"
+#  include "mlx_opengl/mlx_opengl.h"
+#  include "mlx_opengl/mlx_new_window.h"
+#  include "mlx_opengl/mlx.h"
+# endif
+
 # include "mlx_linux/mlx_int.h"
 # include "mlx_linux/mlx.h"
+
 # include <unistd.h>
 # include <string.h>
 # include <stdlib.h>
