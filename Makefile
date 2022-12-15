@@ -10,6 +10,7 @@ PATH_MLX_Darwin = ./mlx_opengl/
 PATH_OBJ = ./obj/
 
 FLAGS_Darwin = -Lmlx_opengl -framework OpenGL -framework AppKit
+FLAGS_Linux = -lX11 -lXext
 MLX = $(PATH_MLX_$(UNAME))libmlx_$(UNAME).a
 NAME = so_long
 
@@ -23,7 +24,7 @@ OBJ = $(patsubst $(PATH_SRC)%.c, $(PATH_OBJ)%.o, $(FILES))
 
 CC = clang
 CFLAGS = -Wall -Wextra -Werror -g
-MLXFLAGS = -I $(PATH_MLX_$(UNAME)) -L $(PATH_MLX_$(UNAME)) -lX11 -lXext
+MLXFLAGS = -I $(PATH_MLX_$(UNAME)) -L $(PATH_MLX_$(UNAME)) $(FLAGS_$(UNAME))
 RM = rm -rf
 
 all: $(NAME)
